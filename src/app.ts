@@ -1,17 +1,10 @@
-// instanciar as variaveis globais
-// chamar os padroes as models e os carai (?)
-import { User } from '@models/User';
-import express from 'express';
+import express, { request } from 'express';
 import routes from './routes';
 
 const app = express();
-app.locals.users = [];
-app.locals.relationships = [];
 
-app.locals.users.push({
-    cpf: '09876543210',
-    name: 'DJ Rogerinho'
-});
+request.users = [];
+request.relationships = [];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
