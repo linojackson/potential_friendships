@@ -1,5 +1,3 @@
-import { User } from '@models/User';
-
 function getByCpf(request,response) {
 	const foundedUser = request.app.locals.users.find( (user) => user.cpf == request.params.cpf);
 	if (foundedUser) {
@@ -11,13 +9,13 @@ function getByCpf(request,response) {
 
 function create(request,response) {
 	const { cpf, name } = request.body;
+	if (!cpf || !name) {
+		return response.status(400).json({ message: 'Fields must have a value' });
+	}
 	const userExists = request.app.locals.users.find( (user) => user.cpf == cpf);
 
 	if (cpf.length !== 11 || !Number(cpf) ) {
 		return response.status(400).json({ message: 'CPF is invalid' });
-	}
-	if (!cpf || !name) {
-		return response.status(400).json({ message: 'Fields must have a value' });
 	}
 	if (userExists) {
 		return response.status(400).json({ message: 'User already exists' });
@@ -43,8 +41,3 @@ export default {
 	create,
 	clean
 }
-// export class UsersController {
-// 	teste() {
-// 		const user = new User();
-// 	}
-// }
