@@ -1,4 +1,4 @@
 export class User {
-    name: string;
-    cpf: number;
+	name: string;
+	cpf: number;
 }
