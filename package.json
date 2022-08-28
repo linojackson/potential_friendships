@@ -1,0 +1,18 @@
+{
+  "name": "potencial_friendships",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jackson Lino <jackson.lino@hotmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --ignore-watch node_modules --no-notify src/server.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.8.2"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
