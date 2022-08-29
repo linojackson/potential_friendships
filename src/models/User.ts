@@ -1,6 +1,6 @@
 export interface User {
 	cpf: string;
-	name: string;
+	name?: string;
 }
 
 export interface Users extends Array<User>{}

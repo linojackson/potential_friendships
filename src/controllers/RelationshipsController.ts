@@ -1,28 +1,30 @@
+import { verifyRelationshipExists } from "@models/Relationship";
 import { Request, Response } from "express";
 
 function create(request: Request,response: Response) {
 	const { cpf1, cpf2 } = request.body;
+
 	if (!cpf2 || !cpf1) {
-		return response.status(400).json({ message: 'Fields must have a value' });
+		throw response.status(400).json({ message: 'Fields must have a value' });
 	}
+
 	const user1Exists = request.users.find( (user) => user.cpf == cpf1);
 	const user2Exists = request.users.find( (user) => user.cpf == cpf2);
-	const relationshipExists = request.relationships.find( (relationship) => (
-		(relationship.cpf1 === cpf1 || relationship.cpf1 === cpf2)
-		&& (relationship.cpf2 === cpf1 || relationship.cpf2 === cpf2)
-	));
+	const relationshipExists = request.relationships.find(
+		(relationship) => verifyRelationshipExists(relationship, cpf1, cpf2)
+	);
 
 	if (cpf1.length !== 11 || !Number(cpf1) ) {
-		return response.status(400).json({ message: 'CPF1 is invalid' });
+		throw response.status(400).json({ message: 'CPF1 is invalid' });
 	}
 	if (cpf2.length !== 11 || !Number(cpf2) ) {
-		return response.status(400).json({ message: 'CPF2 is invalid' });
+		throw response.status(400).json({ message: 'CPF2 is invalid' });
 	}
 	if (relationshipExists) {
-		return response.status(400).json({ message: 'Relationship already exists' });
+		throw response.status(400).json({ message: 'Relationship already exists' });
 	}
 	if (!user1Exists || !user2Exists) {
-		return response.status(404).json({ message: 'Some user not exists' });
+		throw response.status(404).json({ message: 'Some user not exists' });
 	}
 	
 	request.relationships.push({
@@ -34,25 +36,72 @@ function create(request: Request,response: Response) {
 }
 
 function recommendations(request: Request,response: Response) {
-	const { cpf, name } = request.body;
-	if (!cpf || !name) {
-		return response.status(400).json({ message: 'Fields must have a value' });
+	if (request.params.cpf.length !== 11 || !Number(request.params.cpf) ) {
+		throw response.status(400).json({ message: 'CPF is invalid' });
 	}
-	const userExists = request.users.find( (user) => user.cpf == cpf);
 
-	if (cpf.length !== 11 || !Number(cpf) ) {
-		return response.status(400).json({ message: 'CPF is invalid' });
-	}
-	if (userExists) {
-		return response.status(400).json({ message: 'User already exists' });
+	const foundedUser = request.users.find( (user) => user.cpf == request.params.cpf);
+	if (!foundedUser) {
+		throw response.status(404).json({ message: 'User not found' });
 	}
 	
-	request.users.push({
-		cpf,
-		name
-	});
+	// Get all friends of a CPF
+	const filterRealtions = request.relationships
+		.filter( (relationship) => {
+			return (relationship.cpf1 === request.params.cpf || relationship.cpf2 === request.params.cpf)
+		})
+		.map(relationship => {
+			return (request.params.cpf === relationship.cpf1) ?
+				relationship.cpf2 : relationship.cpf1
+		});
 
-	return response.status(200).json({ message: 'User created' });
+	// Get all friends of friends of a CPF
+	const potencialFrindsFilter = request.relationships
+		.filter(relationship => {
+			return ((filterRealtions.indexOf(relationship.cpf1) >= 0) 
+					&& (filterRealtions.indexOf(relationship.cpf2) < 0))
+				|| ((filterRealtions.indexOf(relationship.cpf2) >= 0) 
+					&& (filterRealtions.indexOf(relationship.cpf1) < 0))
+		})
+		.map(relationship => {
+			return (filterRealtions.indexOf(relationship.cpf1) >= 0) ?
+				relationship.cpf2 : relationship.cpf1
+		})
+		.filter(potencialFriend => potencialFriend !== request.params.cpf);
+
+	// Calculate rank of potencial friends
+	const rankedFriends = potencialFrindsFilter.reduce((users, currentUser) => {
+		const indexCpfExists = users.findIndex(potencialFriend => potencialFriend.cpf == currentUser)
+
+		if (indexCpfExists >= 0) {
+			users[indexCpfExists].count++;
+			return users
+		} else {
+			const newCpf = {
+				cpf: currentUser,
+				count: 1,
+			}
+			users.push(newCpf)
+			return users
+		}
+	}, []);
+
+	// Rank potencial friends by correlation
+	const potencialFriendsSorted = rankedFriends.sort((a, b) => {
+		if (a.count < b.count) {
+		return 1;
+		}
+		if (a.count > b.count) {
+		return -1;
+		}
+		// a must be equal to b
+		return 0;
+	});
+  
+	// Return only CPF of potencial friends
+	const formatedPotencialFriends = potencialFriendsSorted.map(user => user.cpf)
+
+	return response.status(200).json(formatedPotencialFriends);
 }
 
 
