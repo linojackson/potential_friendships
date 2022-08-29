@@ -89,10 +89,10 @@ function recommendations(request: Request,response: Response) {
 	// Rank potencial friends by correlation
 	const potencialFriendsSorted = rankedFriends.sort((a, b) => {
 		if (a.count < b.count) {
-		return 1;
+			return 1;
 		}
 		if (a.count > b.count) {
-		return -1;
+			return -1;
 		}
 		// a must be equal to b
 		return 0;
