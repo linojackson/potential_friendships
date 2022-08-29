@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  app:
+    container_name: potencial_friendships_prod
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      - PORT=3000
+    ports:
+      - 3000:3000
