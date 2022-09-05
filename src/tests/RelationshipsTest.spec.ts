@@ -94,7 +94,7 @@ describe('Get recommendations', () => {
 		expect(response.body).toEqual(messageError);
 	})
 
-	it('should be return potencial friendships', async () => {
+	it('should be return potential friendships', async () => {
 		const arrayExpected = [ '77777777777', '66666666666' ]
 		const user: User = { cpf: '11111111111' };
 

@@ -1,4 +1,4 @@
-# potencial_friendships
+# potential_friendships
 
 [![Build Status](https://travis-ci.org/hagopj13/node-express-boilerplate.svg?branch=master)](https://travis-ci.org/hagopj13/node-express-boilerplate)
 [![Coverage Status](https://coveralls.io/repos/github/hagopj13/node-express-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/hagopj13/node-express-boilerplate?branch=master)
@@ -15,8 +15,8 @@ If you would still prefer to do the installation manually, follow these steps:
 Clone the repo:
 
 ```bash
-git clone https://github.com/linojackson/potencial_friendships
-cd potencial_friendships
+git clone https://github.com/linojackson/potential_friendships
+cd potential_friendships
 ```
 
 Install the dependencies:
@@ -138,7 +138,7 @@ List of available routes:
 
 **Relationships routes**:\
 `POST /relationship` - create a relationship between two users\
-`GET /recommendations/:cpf` - recommends potencial friends\
+`GET /recommendations/:cpf` - recommends potential friends\
 
 **Seeds routes**:\
 `POST /seeds/users` - seeds DB with some users\

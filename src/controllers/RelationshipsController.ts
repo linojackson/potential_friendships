@@ -56,7 +56,7 @@ function recommendations(request: Request,response: Response) {
 		});
 
 	// Get all friends of friends of a CPF
-	const potencialFrindsFilter = request.relationships
+	const potentialFrindsFilter = request.relationships
 		.filter(relationship => {
 			return ((filterRealtions.indexOf(relationship.cpf1) >= 0) 
 					&& (filterRealtions.indexOf(relationship.cpf2) < 0))
@@ -67,11 +67,11 @@ function recommendations(request: Request,response: Response) {
 			return (filterRealtions.indexOf(relationship.cpf1) >= 0) ?
 				relationship.cpf2 : relationship.cpf1
 		})
-		.filter(potencialFriend => potencialFriend !== request.params.cpf);
+		.filter(potentialFriend => potentialFriend !== request.params.cpf);
 
-	// Calculate rank of potencial friends
-	const rankedFriends = potencialFrindsFilter.reduce((users, currentUser) => {
-		const indexCpfExists = users.findIndex(potencialFriend => potencialFriend.cpf == currentUser)
+	// Calculate rank of potential friends
+	const rankedFriends = potentialFrindsFilter.reduce((users, currentUser) => {
+		const indexCpfExists = users.findIndex(potentialFriend => potentialFriend.cpf == currentUser)
 
 		if (indexCpfExists >= 0) {
 			users[indexCpfExists].count++;
@@ -86,8 +86,8 @@ function recommendations(request: Request,response: Response) {
 		}
 	}, []);
 
-	// Rank potencial friends by correlation
-	const potencialFriendsSorted = rankedFriends.sort((a, b) => {
+	// Rank potential friends by correlation
+	const potentialFriendsSorted = rankedFriends.sort((a, b) => {
 		if (a.count < b.count) {
 			return 1;
 		}
@@ -98,10 +98,10 @@ function recommendations(request: Request,response: Response) {
 		return 0;
 	});
   
-	// Return only CPF of potencial friends
-	const formatedPotencialFriends = potencialFriendsSorted.map(user => user.cpf)
+	// Return only CPF of potential friends
+	const formatedpotentialFriends = potentialFriendsSorted.map(user => user.cpf)
 
-	return response.status(200).json(formatedPotencialFriends);
+	return response.status(200).json(formatedpotentialFriends);
 }
 
 
