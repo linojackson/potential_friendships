@@ -120,9 +120,12 @@ PORT=3000
 ```
 src\
  |--@types\         # Custom types to variables
- |--controllers\    # Route controllers (controller layer)
- |--models\         # Interfaces (data layer)
- |--tests\          # Integration tests
+ |--adapters\       # Route adapters (adapters layer)
+ |--entities\       # Interfaces (entities layer)
+ |--useCases\       # Business Rules (use case layer)
+    |--services\    # Services had the business rules of project
+    |--tests\       # Integration tests
+    |--validations\ # Validations used on services
  |--app.js          # Express app
  |--routes.ts       # Routes
  |--server.ts       # Server start
