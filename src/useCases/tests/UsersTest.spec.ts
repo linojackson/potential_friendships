@@ -1,8 +1,12 @@
 import request from 'supertest';
-import { app } from '../app';
-import { User } from '@models/User';
+import { app } from '../../app';
+import { User } from '@entities/User';
 
 describe('Create user', () => {
+
+	beforeAll(async () => {
+		await request(app).delete('/clean').send();
+	});
 
 	it('should not be able to send missing information', async () => {
 		const messageError: object = { message: 'Fields must have a value' }

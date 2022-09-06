@@ -1,9 +1,9 @@
-import { Relationships } from "@models/Relationship";
-import { Users } from "@models/User";
+import { Relationships } from "@entities/Relationship";
+import { Users } from "@entities/User";
 import { Request, Response } from "express";
 
 
-function createRelationships(request: Request,response: Response) {
+export function createRelationships(request: Request,response: Response) {
 	const relationshipSeed: Relationships = [
         { cpf1: '11111111111', cpf2: '22222222222'},
         { cpf1: '11111111111', cpf2: '33333333333'},
@@ -20,7 +20,7 @@ function createRelationships(request: Request,response: Response) {
 	return response.status(200).json({ message: 'Relationships seeds created' });
 }
 
-function createUsers(request: Request,response: Response) {
+export function createUsers(request: Request,response: Response) {
 	const userSeed: Users = [
         { cpf: '11111111111', name: 'Joao'},
         { cpf: '22222222222', name: 'Maria'},
@@ -36,9 +36,4 @@ function createUsers(request: Request,response: Response) {
     request.users.push(...userSeed);
 
 	return response.status(200).json({ message: 'Users seeds created' });
-}
-
-export default {
-    createRelationships,
-    createUsers
 }

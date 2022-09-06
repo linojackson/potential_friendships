@@ -1,10 +1,8 @@
-import express, { request } from 'express';
+import express from 'express';
 import { routes } from './routes';
+import '@adapters/InitDBAdapter';
 
 const app = express();
-
-request.users = [];
-request.relationships = [];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

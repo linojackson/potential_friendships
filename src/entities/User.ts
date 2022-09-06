@@ -1,5 +1,5 @@
 export interface User {
-	cpf: string;
+	cpf?: string;
 	name?: string;
 }
 

@@ -19,8 +19,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@adapters/*": ["./src/adapters/*"],
       "@controllers/*": ["./src/controllers/*"],
-      "@models/*": ["./src/models/*"]
+      "@entities/*": ["./src/entities/*"],
+      "@services/*": ["./src/useCases/services/*"],
+      "@validations/*": ["./src/useCases/validations/*"]
     }
   },
   "include": [

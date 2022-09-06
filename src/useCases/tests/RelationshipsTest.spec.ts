@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { app } from '../app';
-import { Relationship } from '@models/Relationship';
-import { User } from '@models/User';
+import { app } from '../../app';
+import { Relationship } from '@entities/Relationship';
+import { User } from '@entities/User';
 
 describe('Create relationship', () => {
 
